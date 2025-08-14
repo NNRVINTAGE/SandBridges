@@ -1,0 +1,4 @@
+<ItemGroup>
+  <Compile Include="addons\SandBridges\SandBridges.cs"/>
+  <Compile Include="addons\SandBridges\SandBridgesDock.cs"/>
+</ItemGroup>
