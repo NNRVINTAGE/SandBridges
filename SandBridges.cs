@@ -61,7 +61,7 @@ public partial class SandBridges : EditorPlugin
         }
     }
 
-    public static void InitiateAchievement(Node caller, string achievementId, string profileTag)
+    public static void InitiateAchievement(Node caller, string achievementId)
     {
         if (caller == null)
         {

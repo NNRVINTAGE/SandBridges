@@ -23,10 +23,10 @@ Before using the plugin, make sure you have your software ids and connection tok
 then make sure you have the achievementIds that will be used match to the registered achievement for your software, you can check [them here](https://www.thousands.org/Library/softawareAdministration/manage.php) if you don't have it already.<br>
 If you already have the prequisite, the next step is to open Editor tab from the toolbar and select Editor Dock → SandBridges dock panel then set your software ids & connection token and click save settings.
 <div align="center">
-    <img src="image.png" width="40%" alt="sandbriges dock panel"> 
+    <img src="image.png" width="40%" alt="sandbriges dock panel">
 </div>
 
-after that what's needed is set trigger script to include the call function like below
+achievement plugin will triggered when using the call function
 ```bash
 SandBridges.InitiateAchievement(this, "achievementIds", "userProfileTags");
 ```
