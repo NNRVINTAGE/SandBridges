@@ -20,8 +20,8 @@ public partial class SandBridges : EditorPlugin
         _dock = new SandBridgesDock();
 
         string token = ProjectSettings.GetSetting(TokenKey, DefaultToken).AsString();
-        string libsId = ProjectSettings.GetSetting(LibsKey, DefaultLibs).AsString();
-        _dock.LoadSettings(libsId, token);
+        string libsRefTokens = ProjectSettings.GetSetting(LibsKey, DefaultLibs).AsString();
+        _dock.LoadSettings(libsRefTokens, token);
 
         _dock.SettingsChanged += OnSettingsChanged;
 
@@ -41,12 +41,12 @@ public partial class SandBridges : EditorPlugin
         GD.Print("[SandBridges] Plugin unloaded.");
     }
 
-    private void OnSettingsChanged(string libsId, string token)
+    private void OnSettingsChanged(string libsRefTokens, string token)
     {
-        ProjectSettings.SetSetting(LibsKey, libsId);
+        ProjectSettings.SetSetting(LibsKey, libsRefTokens);
         ProjectSettings.SetSetting(TokenKey, token);
         ProjectSettings.Save();
-        GD.Print($"[SandBridges] Settings saved: libs={libsId}, token={token}");
+        GD.Print($"[SandBridges] Settings saved: libs={libsRefTokens}, token={token}");
     }
 
     private void RemoveAnyExistingDockByName(string name)
@@ -60,6 +60,23 @@ public partial class SandBridges : EditorPlugin
             ctrl.QueueFree();
         }
     }
+    private static void CGcall(Node calls, string libsRefTokens)
+    {
+        if (calls == null)
+        {
+            GD.PrintErr("[SandBridges] CGcall: caller is not set / set to null.");
+            return;
+        }
+        var cgProtocol = "https://www.thousands.org/api/cgc";
+        var localdir = "./tgcg/userdat.cgsb";
+        if (string.IsNullOrEmpty(libsRefTokens))
+        {
+            GD.PrintErr("[SandBridges] undefined keys: your software reftokens is not set or saved in the settings.");
+            return;
+        }
+        var reqst = new HttpRequest();
+        calls.AddChild(reqst);
+    }
 
 // take profileTags from user saved data
 // , string profileTag
@@ -72,19 +89,17 @@ public partial class SandBridges : EditorPlugin
         }
 
         string token = ProjectSettings.GetSetting(TokenKey, DefaultToken).AsString();
-        string libsId = ProjectSettings.GetSetting(LibsKey, DefaultLibs).AsString();
-        var cgProtocol = "https://www.thousands.org/api/cgc";
-
-        if (string.IsNullOrEmpty(libsId))
+        string libsRefTokens = ProjectSettings.GetSetting(LibsKey, DefaultLibs).AsString();
+        if (string.IsNullOrEmpty(libsRefTokens))
         {
-            GD.PrintErr("[SandBridges] InitiateAchievement: your software id is not set in settings dock.");
+            GD.PrintErr("[SandBridges] undefined keys: your software reftokens is not set or saved in the settings.");
             return;
         }
 
         var request = new HttpRequest();
         caller.AddChild(request);
         string body =
-            "libsIds=" + Uri.EscapeDataString(libsId) +
+            "libsIds=" + Uri.EscapeDataString(libsRefTokens) +
             "&achievementIds=" + Uri.EscapeDataString(achievementId) +
             "&profileTags=" + Uri.EscapeDataString(profileTag) +
             "&tokens=" + Uri.EscapeDataString(token);
@@ -102,7 +117,7 @@ public partial class SandBridges : EditorPlugin
         {
             string text = "";
             try { text = Encoding.UTF8.GetString(bytes); } catch { }
-            GD.Print("[SandBridges] Response code: " + code + " | Body: " + text);
+            GD.Print("[SandBridges] Response: " + code + " | Body: " + text);
             request.QueueFree();
         };
     }
