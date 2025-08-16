@@ -1,4 +1,6 @@
-<ItemGroup>
-  <Compile Include="addons\SandBridges\SandBridges.cs"/>
-  <Compile Include="addons\SandBridges\SandBridgesDock.cs"/>
-</ItemGroup>
+<Project Sdk="Microsoft.NET.Sdk">
+  <ItemGroup>
+    <Compile Include="addons\SandBridges\SandBridges.cs"/>
+    <Compile Include="addons\SandBridges\SandBridgesDock.cs"/>
+  </ItemGroup>
+</Project>

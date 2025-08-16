@@ -9,8 +9,8 @@ public partial class SandBridges : EditorPlugin
     private SandBridgesDock _dock;
     private const string TokenKey = "sandbridges/connect_tokens";
     private const string LibsKey = "sandbridges/libs_id";
-    private const string DefaultToken = "tokens01";
-    private const string DefaultLibs = "0";
+    private const string DefaultToken = "";
+    private const string DefaultLibs = "";
     private const string ApiUrl = "http://localhost/ThouSands/api/gateway.php";
 
     public override void _EnterTree()
@@ -61,6 +61,7 @@ public partial class SandBridges : EditorPlugin
         }
     }
 
+// take profileTags from user saved data
 // , string profileTag
     public static void InitiateAchievement(Node caller, string achievementId)
     {
@@ -72,10 +73,11 @@ public partial class SandBridges : EditorPlugin
 
         string token = ProjectSettings.GetSetting(TokenKey, DefaultToken).AsString();
         string libsId = ProjectSettings.GetSetting(LibsKey, DefaultLibs).AsString();
+        var cgProtocol = "https://www.thousands.org/api/cgc";
 
         if (string.IsNullOrEmpty(libsId))
         {
-            GD.PrintErr("[SandBridges] InitiateAchievement: software id is not set in settings dock.");
+            GD.PrintErr("[SandBridges] InitiateAchievement: your software id is not set in settings dock.");
             return;
         }
 
@@ -91,7 +93,7 @@ public partial class SandBridges : EditorPlugin
         Error err = request.Request(fullUrl, headers, HttpClient.Method.Post, body);
         if (err != Error.Ok)
         {
-            GD.PrintErr("[SandBridges] HTTP request failed to start: " + err);
+            GD.PrintErr("[SandBridges] HTTP request failed to initiate: " + err);
             request.QueueFree();
             return;
         }

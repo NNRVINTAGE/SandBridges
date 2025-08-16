@@ -1,5 +1,5 @@
 <h1>SandBriges Plugin</h1>
-A simple achievement plugin for ThouSands Gateway community developer/publisher to add an universal displayable achievement for their user 
+A simple achievement plugin for ThouSands Gateway community developer/publisher to add an universal achievement for their user to display on the forum or CrossGate client
 
 ## Table of Contents
 
@@ -9,9 +9,9 @@ A simple achievement plugin for ThouSands Gateway community developer/publisher 
 - [Usage](#Usage)
 
 ## Installation
-Current version of SandBridges tested using the godot 4 and .Net 6.0 enviroment or newer<br>
-To run the plugin in your project, download the project as a zip file<br>
-- then extract to addons/ directory in your game project
+Current version of SandBridges have been only tested using the godot 4 and .Net 6.0 enviroment or newer<br>
+To install the plugin in your project, first download the project as a zip file<br>
+- then extract to `addons/` directory in your game project
 - open the project and build the project before activating (Alt+B in Godot Editor or "dotnet build" in terminal)
 - Open Project tab in the toolbar then go to Project Settings → Plugins and activate SandBridges plugin like this
 <div align="center">
@@ -21,7 +21,7 @@ To run the plugin in your project, download the project as a zip file<br>
 ## Usage
 Before using the plugin, make sure you have your software ids and connection token [here](https://www.thousands.org/Library/softawareAdministration/manage.php) as without both you can't make connection to the platform.<br>
 then make sure you have the achievementIds that will be used match to the registered achievement for your software, you can check [them here](https://www.thousands.org/Library/softawareAdministration/manage.php) if you don't have it already.<br>
-If you already have the prequisite, the next step is to open Editor tab from the toolbar and select Editor Dock → SandBridges dock panel then set your software ids & connection token and click save settings.
+If you already have the prequisite, the next step is to open Editor tab from the toolbar and select Editor Dock → SandBridges dock panel then set your software ids & connection token and click the save button.
 <div align="center">
     <img src="image.png" width="40%" alt="sandbriges dock panel">
 </div>
