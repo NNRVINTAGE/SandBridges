@@ -27,7 +27,7 @@ public partial class SandBridges : EditorPlugin
 
         AddControlToDock(DockSlot.RightUl, _dock);
 
-        GD.Print("[SandBridges] Plugin loaded.");
+        GD.Print("[SandBridges] Plugin enabled");
     }
 
     public override void _ExitTree()
@@ -38,7 +38,7 @@ public partial class SandBridges : EditorPlugin
             _dock.QueueFree();
             _dock = null;
         }
-        GD.Print("[SandBridges] Plugin unloaded.");
+        GD.Print("[SandBridges] Plugin disabled");
     }
 
     private void OnSettingsChanged(string libsRefTokens, string token)
@@ -64,22 +64,43 @@ public partial class SandBridges : EditorPlugin
     {
         if (calls == null)
         {
-            GD.PrintErr("[SandBridges] CGcall: caller is not set / set to null.");
+            GD.PrintErr("[SandBridges] CGcall: undefined caller");
             return;
         }
-        var cgProtocol = "https://www.thousands.org/api/cgc";
-        var localdir = "./tgcg/userdat.cgsb";
+        var cgProtocol = "https://www.thousands.org/api/cgc.php?skey=";
+        var localdir = "./tgcg/udb.o";
+        string libsRefTokens = ProjectSettings.GetSetting(LibsKey, DefaultLibs).AsString();
         if (string.IsNullOrEmpty(libsRefTokens))
         {
             GD.PrintErr("[SandBridges] undefined keys: your software reftokens is not set or saved in the settings.");
             return;
         }
+
         var reqst = new HttpRequest();
         calls.AddChild(reqst);
+        string body =
+            "libsIds=" + Uri.EscapeDataString(libsRefTokens);
+        string fullUrl = cgProtocol + Uri.EscapeDataString(libsRefTokens);
+        var headers = new string[] { "Content-Type: application/x-www-form-urlencoded" };
+        Error err = reqst.Request(fullUrl, headers, HttpClient.Method.Post, body);
+        if (err != Error.Ok)
+        {
+            GD.PrintErr("[SandBridges] HTTP request failed to initiate: " + err);
+            reqst.QueueFree(); 
+            return;
+        }
+
+        reqst.RequestCompleted += (result, code, hdrs, bytes) =>
+        {
+            string text = "";
+            try { text = Encoding.UTF8.GetString(bytes); } catch { }
+            GD.Print("[SandBridges] Response: " + code + " | Body: " + text);
+            reqst.QueueFree();
+        };
     }
 
 // take profileTags from user saved data
-// , string profileTag
+// , string profileTags
     public static void InitiateAchievement(Node caller, string achievementId)
     {
         if (caller == null)
@@ -89,7 +110,6 @@ public partial class SandBridges : EditorPlugin
         }
 
         string token = ProjectSettings.GetSetting(TokenKey, DefaultToken).AsString();
-        string libsRefTokens = ProjectSettings.GetSetting(LibsKey, DefaultLibs).AsString();
         if (string.IsNullOrEmpty(libsRefTokens))
         {
             GD.PrintErr("[SandBridges] undefined keys: your software reftokens is not set or saved in the settings.");
