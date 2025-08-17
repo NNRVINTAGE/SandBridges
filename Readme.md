@@ -1,13 +1,16 @@
 <h1>SandBriges Plugin</h1>
 Achievement and Authentication plugin for ThouSands Gateway community developer/publisher
 
-
 ## Table of Contents
 
 - [What is this plugin is about?](#What-is-this-plugin-is-about?)
 - [Table of Contents](#table-of-contents)
+- [Documentation](#Documentation)
 - [Installation](#Installation)
 - [Setup](#Setup)
+
+## Documentation
+to see full documentation of the plugin, please refer to [here](https://www.thousands.org/documentation/cgdocs.php)
 
 ## Installation
 Current version of SandBridges have been only tested using the godot 4 and .Net 6.0 enviroment or newer<br>

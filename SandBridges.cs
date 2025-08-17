@@ -46,7 +46,7 @@ public partial class SandBridges : EditorPlugin
         ProjectSettings.SetSetting(LibsKey, libsRefTokens);
         ProjectSettings.SetSetting(TokenKey, token);
         ProjectSettings.Save();
-        GD.Print($"[SandBridges] Settings saved: libs={libsRefTokens}, token={token}");
+        GD.Print($"[SandBridges] Saved Settings: Reference Token={libsRefTokens}, Connection Token={token}");
     }
 
     private void RemoveAnyExistingDockByName(string name)
@@ -60,6 +60,29 @@ public partial class SandBridges : EditorPlugin
             ctrl.QueueFree();
         }
     }
+
+    private static void TGCrossGate(Node calls, string CallFunc, string libsRefTokens)
+    {
+        if (calls == null)
+        {
+            GD.PrintErr("[SandBridges] CGcall: undefined caller");
+            return;
+        }
+        var localdir = "./tgcg/udb.o";
+        string libsRefTokens = ProjectSettings.GetSetting(LibsKey, DefaultLibs).AsString();
+        if (string.IsNullOrEmpty(CallFunc))
+        {
+            GD.PrintErr("[SandBridges] undefined call function: unset calls in the function.");
+            return;
+        }
+        if (string.IsNullOrEmpty(libsRefTokens))
+        {
+            GD.PrintErr("[SandBridges] undefined keys: your software reference tokens is not set or saved in the settings.");
+            return;
+        }
+
+    }
+
     private static void CGcall(Node calls, string libsRefTokens)
     {
         if (calls == null)
@@ -72,7 +95,7 @@ public partial class SandBridges : EditorPlugin
         string libsRefTokens = ProjectSettings.GetSetting(LibsKey, DefaultLibs).AsString();
         if (string.IsNullOrEmpty(libsRefTokens))
         {
-            GD.PrintErr("[SandBridges] undefined keys: your software reftokens is not set or saved in the settings.");
+            GD.PrintErr("[SandBridges] undefined keys: your software reference tokens is not set or saved in the settings.");
             return;
         }
 
